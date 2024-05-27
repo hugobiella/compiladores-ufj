@@ -41,8 +41,8 @@ int yyerror(const char *s);
 "!00111100" {return '<';}
 "{" {return '{';}
 "}" {return '}';}
-"01110100011100100111010101100101" {return TOK_TRUE;}
-"0110011001100001011011000111001101100101" {return TOK_FALSE;}
+"!01110100011100100111010101100101" {return TOK_TRUE;}
+"!0110011001100001011011000111001101100101" {return TOK_FALSE;}
 
 \"[a-zA-Z_' '0-9]+\" {return TOK_STRING;}
 [a-zA-Z_][a-zA-Z0-9_]* {return TOK_IDENT;}
