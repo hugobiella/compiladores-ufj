@@ -42,47 +42,35 @@ globals : globals global{
 globals : global{
 }
 
-global : declaration | atribuition | loop | print | selection | break{
-}
+global :
+    declaration{}|
+    atribuition{}|
+    loop{}       |
+    print{}      |
+    selection{}  |   
+    break{}
 
-declaration : type TOK_IDENT '=' tok ';'{
-} 
+type : 
+    TIPO_INT{}   |
+    TIPO_FLOAT{} |
+    TIPO_STRING{}|
+    TIPO_BOOL{}  |
+    TIPO_CHAR{}
 
-declaration : type TOK_IDENT ';'{
-}
+declaration : 
+    type TOK_IDENT '=' tok ';'{}|
+    type TOK_IDENT ';'{}
 
-atribuition: TOK_IDENT '=' tok ';'{
-}
+atribuition: 
+    TOK_IDENT '=' tok ';'{}|
+    TOK_IDENT '=' scan{}
 
-atribuition : TOK_IDENT '=' scan{
-}
+scan : TOK_SCAN '(' type ')'';'{}
 
-scan : TOK_SCAN '(' type ')'';'{
-}
-
-type : TIPO_INT{
-}
-
-type : TIPO_FLOAT{
-}
-
-type : TIPO_STRING{
-}
-
-type : TIPO_BOOL{
-}
-
-type : TIPO_CHAR{
-}
-
-tok : TOK_STRING{
-}
-
-tok : condition{
-}
-
-tok : TOK_CHAR{
-}
+tok : 
+    TOK_STRING{}|
+    condition{} |
+    TOK_CHAR{}  
 
 numeric_expression : numeric_expression '+' numeric_term{
 } 
