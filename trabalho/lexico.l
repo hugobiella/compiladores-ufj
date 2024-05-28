@@ -24,7 +24,7 @@ int yyerror(const char *s);
 "!01100011011010000110000101110010" {return TIPO_CHAR;}
 "!011100110111010001110010011010010110111001100111" {return TIPO_STRING;}
 "!0110111101110010" {return TOK_OR;}
-"!0110000101101110 01100100" {return TOK_AND;}
+"||" {return TOK_AND;}
 "!00101011" {return '+';}
 "!00101101" {return '-';}
 "!00101010" {return '*';}
@@ -37,8 +37,8 @@ int yyerror(const char *s);
 "!0011110000111101" {return TOK_MEOI;}
 "!0011111000111101" {return TOK_MAOI;}
 "!0011110100111101" {return TOK_IGUAL;}
-"!00111110" {return '>';}
-"!00111100" {return '<';}
+">" {return '>';}
+"<" {return '<';}
 "{" {return '{';}
 "}" {return '}';}
 "!01110100011100100111010101100101" {return TOK_TRUE;}
