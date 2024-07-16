@@ -19,7 +19,7 @@ int yylex(void);
 %token TOK_ID TOK_PF TOK_INTEIRO TOK_PALAVRA TOK_VERDADEIRO TOK_FALSO
 
 %token TOK_PRINT
-%token TOK_ENQUANTO
+%token TOK_WHILE
 %token TOK_SE
 %token TOK_SENAO
 %token TOK_CASO
@@ -71,10 +71,10 @@ globals: globals[gg] global {$gg->append($global);
 
 
 global: TOK_ID '=' expr ';'     { $$ = new Variavel($TOK_ID,$expr);     }
-        |TOK_PRINT factor ';' { $$ = new Mostra($factor);      }
+        |TOK_PRINT factor ';' { $$ = new print($factor);      }
         |TOK_SE  '(' cmprt ')'  '{' globals '}' { $$ = new Se($cmprt,$globals); }
         |TOK_SE  '(' cmprt ')'  '{' globals[g1] '}' TOK_SENAO '{' globals[g2] '}'       { $$ = new SeSenao($cmprt,$g1,$g2);     }
-        |TOK_ENQUANTO '(' cmprt ')' '{' globals '}'    { $$ = new Enquanto($cmprt,$globals);   }
+        |TOK_WHILE '(' cmprt ')' '{' globals '}'    { $$ = new Enquanto($cmprt,$globals);   }
         |TOK_LOOP '{' globals'}'        { $$ = new Loop($globals);      }
         |error ';'      { $$ = new Node();      }
         |error  { $$ = new Node();      }

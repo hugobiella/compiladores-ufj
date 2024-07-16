@@ -61,7 +61,7 @@ extern int yydebug;
     TOK_VERDADEIRO = 262,          /* TOK_VERDADEIRO  */
     TOK_FALSO = 263,               /* TOK_FALSO  */
     TOK_PRINT = 264,               /* TOK_PRINT  */
-    TOK_ENQUANTO = 265,            /* TOK_ENQUANTO  */
+    TOK_WHILE = 265,               /* TOK_WHILE  */
     TOK_SE = 266,                  /* TOK_SE  */
     TOK_SENAO = 267,               /* TOK_SENAO  */
     TOK_CASO = 268,                /* TOK_CASO  */

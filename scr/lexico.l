@@ -15,36 +15,34 @@ int yyerror(const char *s);
 [ \t\r\n_]  {   /*ignora*/  }
 "//".*\n { /*Comentário*/ }
 
-"!0111000001110010011010010110111001110100" {return TOK_PRINT;}
-"todo1" {return TOK_ENQUANTO;}
-"todo2" {return TOK_LOOP;}
-"!0110100101100110" {return TOK_SE;}
-"!01100101011011000111001101100101" {return TOK_SENAO;}
-"todo3" {return TOK_NAO;}
-"todo4" {return TOK_E;}
-"!0110111101110010" {return TOK_OU;}
-"todo5" {return TOK_IGUAL;}
-"todo6" {return TOK_DIFERENTE;}
-"todo8" {return '+' ; }
-"todo7" {return '-' ; }
-"todo9" {return '*' ; }
-"todo01" {return '/' ; }
-"todo11" {return '(' ; }
-"todo12" {return ')' ; }
-"todo13" {return ';' ; }
-"todo14" {return '=' ; }
-"todo15" {return '<' ; }
-"todo16" {return '>' ; }
-"todo17" {return '{' ; }
-"todo18" {return '}' ; }
-"todo19" {return '^' ;}
-"todo20" {return '!' ;}
-"todo21" {return '[' ; }
-"todo22" {return ']' ; }
-
-
-"verdadeiro" {return TOK_VERDADEIRO;}
-"falso" {return TOK_FALSO;}
+"!0111000001110010011010010110111001110100!" {return TOK_PRINT;}
+"!0111011101101000011010010110110001100101!" {return TOK_WHILE;}
+"!01101100011011110110111101110000!" {return TOK_LOOP;}
+"!0110100101100110!" {return TOK_SE;}
+"!01100101011011000111001101100101!" {return TOK_SENAO;}
+"!0110111001101111!" {return TOK_NAO;}
+"!011000010110111001100100!" {return TOK_E;}
+"!0110111101110010!" {return TOK_OU;}
+"!0011110100111101!" {return TOK_IGUAL;}
+"!00100001!" {return TOK_DIFERENTE;}
+"!00101011!" {return '+';}
+"!00101101!" {return '-';}
+"!00101010!" {return '*';}
+"!00101111!" {return '/';}
+"(" {return '(';}
+")" {return ')';}
+"!00111011!" {return ';';}
+"!00111101!" {return '='; }
+">" {return '>';}
+"<" {return '<';}
+"{" {return '{';}
+"}" {return '}';}
+"^" {return '^' ;}
+"!" {return '!' ;}
+"[" {return '[' ; }
+"]" {return ']' ; }
+"!01110100011100100111010101100101!" {return TOK_VERDADEIRO;}
+"!0110011001100001011011000111001101100101!" {return TOK_FALSO;}
 
 [a-zA-Z_][a-zA-Z0-9_]* {yylval.str = strndup(yytext, yyleng);
                         return TOK_ID ; }

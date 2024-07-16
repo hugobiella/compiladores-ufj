@@ -356,13 +356,13 @@ public:
     }
 };
 
-class Mostra : public Node
+class print : public Node
 {
 protected:
     Node *value;
 
 public:
-    Mostra(Node *v)
+    print(Node *v)
     {
         value = v;
         children.push_back(v);
@@ -370,7 +370,7 @@ public:
 
     virtual string toStr()
     {
-        return "mostra";
+        return "print";
     }
 };
 

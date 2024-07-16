@@ -113,7 +113,7 @@ enum yysymbol_kind_t
   YYSYMBOL_TOK_VERDADEIRO = 7,             /* TOK_VERDADEIRO  */
   YYSYMBOL_TOK_FALSO = 8,                  /* TOK_FALSO  */
   YYSYMBOL_TOK_PRINT = 9,                  /* TOK_PRINT  */
-  YYSYMBOL_TOK_ENQUANTO = 10,              /* TOK_ENQUANTO  */
+  YYSYMBOL_TOK_WHILE = 10,                 /* TOK_WHILE  */
   YYSYMBOL_TOK_SE = 11,                    /* TOK_SE  */
   YYSYMBOL_TOK_SENAO = 12,                 /* TOK_SENAO  */
   YYSYMBOL_TOK_CASO = 13,                  /* TOK_CASO  */
@@ -559,7 +559,7 @@ static const char *const yytname[] =
 {
   "\"end of file\"", "error", "\"invalid token\"", "TOK_ID", "TOK_PF",
   "TOK_INTEIRO", "TOK_PALAVRA", "TOK_VERDADEIRO", "TOK_FALSO", "TOK_PRINT",
-  "TOK_ENQUANTO", "TOK_SE", "TOK_SENAO", "TOK_CASO", "TOK_LOOP", "TOK_E",
+  "TOK_WHILE", "TOK_SE", "TOK_SENAO", "TOK_CASO", "TOK_LOOP", "TOK_E",
   "TOK_OU", "TOK_NAO", "TOK_IGUAL", "TOK_DIFERENTE", "'='", "';'", "'('",
   "')'", "'{'", "'}'", "'<'", "'>'", "'['", "']'", "'!'", "'+'", "'-'",
   "'*'", "'/'", "'^'", "$accept", "program", "globals", "global", "cmprt",
@@ -1486,7 +1486,7 @@ yyreduce:
 
   case 6: /* global: TOK_PRINT factor ';'  */
 #line 74 "sintaxe.y"
-                              { (yyval.node) = new Mostra((yyvsp[-1].node));      }
+                              { (yyval.node) = new print((yyvsp[-1].node));      }
 #line 1491 "sintaxe.tab.c"
     break;
 
@@ -1502,9 +1502,9 @@ yyreduce:
 #line 1503 "sintaxe.tab.c"
     break;
 
-  case 9: /* global: TOK_ENQUANTO '(' cmprt ')' '{' globals '}'  */
+  case 9: /* global: TOK_WHILE '(' cmprt ')' '{' globals '}'  */
 #line 77 "sintaxe.y"
-                                                       { (yyval.node) = new Enquanto((yyvsp[-4].node),(yyvsp[-1].node));   }
+                                                    { (yyval.node) = new Enquanto((yyvsp[-4].node),(yyvsp[-1].node));   }
 #line 1509 "sintaxe.tab.c"
     break;
 
