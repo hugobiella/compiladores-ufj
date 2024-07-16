@@ -10,6 +10,11 @@ extern char *build_file_name;
 using namespace std;
 
 class Node {
+
+public:
+    virtual std::string toStr() = 0;
+    virtual ~Node() = default;
+
 protected:
         vector<Node*> children;
         int lineno;
@@ -194,6 +199,17 @@ void printf_tree(Node *root) {
     printf_tree_recursive(root);
     cout << "}" << endl;
 }
+
+class Scan : public Node {
+protected:
+    std::string variableName;
+public:
+    Scan(const std::string& varName) : variableName(varName) {}
+
+    virtual std::string toStr() override {
+        return "scan(" + variableName + ")";
+    }
+};
 
 class CheckVarDecl {
 private:

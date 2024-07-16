@@ -20,12 +20,35 @@ extern bool force_print_tree;
 
 %token TOK_IDENT
 %token TOK_PRINT
-%token TOK_FLOAT
+%token TOK_SCAN
 %token TOK_INT
+%token TOK_FLOAT
+%token TOK_STRING
+%token TOK_CHAR
+%token TOK_IF
+%token TOK_ELSE
+%token TOK_LOOP
+%token TOK_BREAK
+%token TOK_TRUE
+%token TOK_FALSE
+%token TOK_IGUAL
+%token TOK_DIFERENTE
+%token TOK_MEOI
+%token TOK_MAOI
+%token TOK_OR 
+%token TOK_AND
+%token TIPO_INT
+%token TIPO_FLOAT
+%token TIPO_STRING
+%token TIPO_CHAR
+%token TIPO_BOOL
 
 %type<str> TOK_IDENT
 %type<itg> TOK_INT
 %type<flt> TOK_FLOAT
+%type<str> TOK_STRING
+%type<str> TOK_CHAR
+
 %type<node> global globals expr term factor unary
 
 %printer { fprintf(yyo, "%s", $$); } <str>
@@ -61,6 +84,20 @@ globals : global {
     n->append($global);
     $$ = n;
 }
+
+global 
+    : TOK_PRINT TOK_IDENT ';' {
+        Ident *id = new Ident($2);
+        $$ = new Print(id);
+    }
+    | TOK_SCAN TOK_IDENT ';' {
+        Ident *id = new Ident($2);
+        $$ = new Scan(id->toStr());
+    }
+    | error ';' {
+        $$ = new Node();
+    }
+    ;
 
 global : TOK_IDENT '=' expr ';' {
     $$ = new Variable($TOK_IDENT, $expr);

@@ -42,6 +42,8 @@ globals : globals global{
 globals : global{
 }
 
+scan : TOK_SCAN '(' type ')'';'{}
+
 global :
     declaration{}|
     atribuition{}|
@@ -65,21 +67,16 @@ atribuition:
     TOK_IDENT '=' tok ';'{}|
     TOK_IDENT '=' scan{}
 
-scan : TOK_SCAN '(' type ')'';'{}
-
 tok : 
     TOK_STRING{}|
     condition{} |
     TOK_CHAR{}  
 
-numeric_expression : numeric_expression '+' numeric_term{
-} 
+numeric_expression:
+    numeric_expression '+' numeric_term|
+    numeric_expression '-' numeric_term|
+    numeric_term
 
-numeric_expression : numeric_expression '-' numeric_term{
-}
-
-numeric_expression : numeric_term{
-}
 
 numeric_term : numeric_term '*' numeric_factor{
 }
