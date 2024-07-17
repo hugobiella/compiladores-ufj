@@ -446,9 +446,9 @@ public:
                 cout << build_file_name
                      << " "
                      << id->getLineNo()
-                     << ":0: Erro Semântico: "
+                     << ":0: erro: "
                      << id->getName()
-                     << " Não definido!."
+                     << " undefinied!."
                      << endl;
             }
         }
@@ -624,8 +624,8 @@ public:
                 cout << build_file_name
                      << " "
                      << id->getLineNo()
-                     << ":0: Erro semântico: "
-                     << "Não use apenas uma variável do tipo [Palavra] em uma Condição"
+                     << ":0: erro: "
+                     << "onde word in condition!"
                      << endl;
 
                 return;
@@ -639,8 +639,8 @@ public:
             cout << build_file_name
                  << " "
                  << p->getLineNo()
-                 << ":0: Erro semântico: "
-                 << "Não use apenas uma variável do tipo [Palavra] em uma Condição"
+                 << ":0: erro: "
+                 << "one var in condition!"
                  << endl;
             return;
         }
@@ -810,11 +810,11 @@ public:
                 cout << build_file_name
                      << " "
                      << ob->getLineNo()
-                     << ":0: Erro Semântico:  Operações entre ["
+                     << ":0: erro:  ["
                      << getNameNode(ob->getNode1())
                      << "] e ["
                      << getNameNode(ob->getNode2())
-                     << "] não são válidas!"
+                     << "] Invalid!"
                      << endl;
                 return __INT_MAX__;
             }
