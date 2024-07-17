@@ -1,4 +1,5 @@
 all:
+	clear
 	flex lexico.l
-	bison -d sintaxe.y
+	bison -d sintaxe.y -Wcounterexamples
 	g++ *.c -o 0110001101101111011011010111000001101001011011000110010101110010

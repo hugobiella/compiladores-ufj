@@ -39,7 +39,7 @@
 # define YY_YY_SINTAXE_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
-# define YYDEBUG 0
+# define YYDEBUG 1
 #endif
 #if YYDEBUG
 extern int yydebug;
@@ -54,37 +54,42 @@ extern int yydebug;
     YYEOF = 0,                     /* "end of file"  */
     YYerror = 256,                 /* error  */
     YYUNDEF = 257,                 /* "invalid token"  */
-    TOK_IDENT = 258,               /* TOK_IDENT  */
-    TOK_PRINT = 259,               /* TOK_PRINT  */
-    TOK_SCAN = 260,                /* TOK_SCAN  */
-    TOK_INT = 261,                 /* TOK_INT  */
-    TOK_FLOAT = 262,               /* TOK_FLOAT  */
-    TOK_STRING = 263,              /* TOK_STRING  */
-    TOK_CHAR = 264,                /* TOK_CHAR  */
-    TOK_IF = 265,                  /* TOK_IF  */
-    TOK_ELSE = 266,                /* TOK_ELSE  */
-    TOK_LOOP = 267,                /* TOK_LOOP  */
-    TOK_BREAK = 268,               /* TOK_BREAK  */
-    TOK_TRUE = 269,                /* TOK_TRUE  */
-    TOK_FALSE = 270,               /* TOK_FALSE  */
-    TOK_IGUAL = 271,               /* TOK_IGUAL  */
-    TOK_DIFERENTE = 272,           /* TOK_DIFERENTE  */
-    TOK_MEOI = 273,                /* TOK_MEOI  */
-    TOK_MAOI = 274,                /* TOK_MAOI  */
-    TOK_OR = 275,                  /* TOK_OR  */
-    TOK_AND = 276,                 /* TOK_AND  */
-    TIPO_INT = 277,                /* TIPO_INT  */
-    TIPO_FLOAT = 278,              /* TIPO_FLOAT  */
-    TIPO_STRING = 279,             /* TIPO_STRING  */
-    TIPO_CHAR = 280,               /* TIPO_CHAR  */
-    TIPO_BOOL = 281                /* TIPO_BOOL  */
+    TOK_ID = 258,                  /* TOK_ID  */
+    TOK_PF = 259,                  /* TOK_PF  */
+    TOK_INTEIRO = 260,             /* TOK_INTEIRO  */
+    TOK_PALAVRA = 261,             /* TOK_PALAVRA  */
+    TOK_VERDADEIRO = 262,          /* TOK_VERDADEIRO  */
+    TOK_FALSO = 263,               /* TOK_FALSO  */
+    TOK_PRINT = 264,               /* TOK_PRINT  */
+    TOK_WHILE = 265,               /* TOK_WHILE  */
+    TOK_SE = 266,                  /* TOK_SE  */
+    TOK_SENAO = 267,               /* TOK_SENAO  */
+    TOK_CASO = 268,                /* TOK_CASO  */
+    TOK_LOOP = 269,                /* TOK_LOOP  */
+    TOK_E = 270,                   /* TOK_E  */
+    TOK_OU = 271,                  /* TOK_OU  */
+    TOK_NAO = 272,                 /* TOK_NAO  */
+    TOK_IGUAL = 273,               /* TOK_IGUAL  */
+    TOK_DIFERENTE = 274            /* TOK_DIFERENTE  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
+union YYSTYPE
+{
+#line 12 "sintaxe.y"
+ 
+    char *str;
+    int itg;
+    double flt;
+    Node *node;
+
+#line 90 "sintaxe.tab.h"
+
+};
+typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif

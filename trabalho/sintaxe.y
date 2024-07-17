@@ -1,177 +1,118 @@
 %{
+#include "nodes.h"
+
+extern bool force_print_tree;
 int yyerror(const char *s);
 int yylex(void);
 %}
 
 %define parse.error verbose
+%define parse.trace
 
-%token TOK_IDENT
+%union { 
+    char *str;
+    int itg;
+    double flt;
+    Node *node;
+}
+
+%token TOK_ID TOK_PF TOK_INTEIRO TOK_PALAVRA TOK_VERDADEIRO TOK_FALSO
+
 %token TOK_PRINT
-%token TOK_SCAN
-%token TOK_INT
-%token TOK_FLOAT
-%token TOK_STRING
-%token TOK_CHAR
-%token TOK_IF
-%token TOK_ELSE
+%token TOK_WHILE
+%token TOK_SE
+%token TOK_SENAO
+%token TOK_CASO
 %token TOK_LOOP
-%token TOK_BREAK
-%token TOK_TRUE
-%token TOK_FALSE
+
+%token TOK_E
+%token TOK_OU
+%token TOK_NAO
 %token TOK_IGUAL
 %token TOK_DIFERENTE
-%token TOK_MEOI
-%token TOK_MAOI
-%token TOK_OR 
-%token TOK_AND
-%token TIPO_INT
-%token TIPO_FLOAT
-%token TIPO_STRING
-%token TIPO_CHAR
-%token TIPO_BOOL
 
-%start program
+%type<str> TOK_ID
+%type<itg> TOK_INTEIRO
+%type<flt> TOK_PF
+%type<str> TOK_PALAVRA
+
+%type<node> globals global cmprt cmprt2 cmprt3 expr term factor unary
+
+%start program 
 
 %%
 
-program : globals;
+program : globals{      Node *program = new Program();
+                        program->append($globals);
+                        
+                        //Analise semantica
 
-globals : globals global{
-}
+                        CheckVarDecl cvd;
+                        cvd.check(program);
+                        
+                                                
+                        if(error_count>0){
+                                cout    << "\nForam encontrados "
+                                        << error_count
+                                        << " erros no  No código\n"
+                                        << endl;  
+                        }
+                        if(force_print_tree||error_count==0){
+                                printf_tree(program);
+                        }
+                        
+                }
 
-globals : global{
-}
+globals: globals[gg] global {$gg->append($global);
+                        $$ = $gg;       }
+        |global {       Node *n = new Node();
+                        n->append($global);
+                        $$ = n; }
 
-global :
-    declaration{}|
-    atribuition{}|
-    loop{}       |
-    print{}      |
-    selection{}  |   
-    break{}
 
-type : 
-    TIPO_INT{}   |
-    TIPO_FLOAT{} |
-    TIPO_STRING{}|
-    TIPO_BOOL{}  |
-    TIPO_CHAR{}
+global: TOK_ID '=' expr ';'     { $$ = new Variavel($TOK_ID,$expr);     }
+        |TOK_PRINT factor ';' { $$ = new print($factor);      }
+        |TOK_SE  '(' cmprt ')'  '{' globals '}' { $$ = new Se($cmprt,$globals); }
+        |TOK_SE  '(' cmprt ')'  '{' globals[g1] '}' TOK_SENAO '{' globals[g2] '}'       { $$ = new SeSenao($cmprt,$g1,$g2);     }
+        |TOK_WHILE '(' cmprt ')' '{' globals '}'    { $$ = new Enquanto($cmprt,$globals);   }
+        |TOK_LOOP '{' globals'}'        { $$ = new Loop($globals);      }
+        |error ';'      { $$ = new Node();      }
+        |error  { $$ = new Node();      }
 
-declaration : 
-    type TOK_IDENT '=' tok ';'{}|
-    type TOK_IDENT ';'{}
 
-atribuition: 
-    TOK_IDENT '=' tok ';'{}|
-    TOK_IDENT '=' scan{}
+cmprt:    cmprt[c1] TOK_OU  cmprt2[c2]     { $$ = new OpBinaria($c1,'|',$c2);      }
+        | cmprt[c1] TOK_IGUAL cmprt2[c2]  { $$ = new OpBinaria($c1,'=',$c2);      }
+        | cmprt[c1] '<' cmprt2[c2]         { $$ = new OpBinaria($c1,'<',$c2);      }
+        | cmprt[c1] '>' cmprt2[c2]         { $$ = new OpBinaria($c1,'>',$c2);      }
+        | cmprt2  {      $$ = $cmprt2;  }
 
-scan : TOK_SCAN '(' type ')'';'{}
+cmprt2:   cmprt2[c1] TOK_E cmprt3[c2]        { $$ = new OpBinaria($c1,'&',$c2);      }
+        | cmprt2[c1] TOK_DIFERENTE cmprt3[c2]       { $$ = new OpBinaria($c1,'!',$c2);      }
+        | cmprt3        { $$ = $cmprt3; }
 
-tok : 
-    TOK_STRING{}|
-    condition{} |
-    TOK_CHAR{}  
+cmprt3:  '[' cmprt ']'   { $$ = $cmprt; }
+        | factor        { $$ = $factor; }
+        |'!' '[' cmprt[c2] ']' { $$ = new Unario("!",$c2); }
 
-numeric_expression : numeric_expression '+' numeric_term{
-} 
+expr:   expr[e] '+' term   {$$ = new OpBinaria($e,'+',$term);   }
+        |expr[e] '-' term  {$$ = new OpBinaria($e,'-',$term);   }
+        |term   { $$ = $term;   }
 
-numeric_expression : numeric_expression '-' numeric_term{
-}
+term:   term[t] '*' factor {  $$ = new OpBinaria($t,'*',$factor);}
+        |term[t] '/' factor        { $$ = new OpBinaria($t,'/',$factor);        }
+        |term[t] '^' factor        { $$ = new OpBinaria($t,'^',$factor);        }       
+        |factor { $$ = $factor; }
 
-numeric_expression : numeric_term{
-}
+factor: '(' expr ')'    { $$ = $expr;   }
+        |TOK_PALAVRA    { $$ = new Palavra($TOK_PALAVRA);       }
+        |TOK_INTEIRO    { $$ = new Inteiro($TOK_INTEIRO);       }
+        |TOK_ID { $$ = new Id($TOK_ID);    }
+        |TOK_PF { $$ = new Pf($TOK_PF); }
+        |unary  { $$ = $unary; }
+        |TOK_FALSO      { $$ = new Boleano(false);       }
+        |TOK_VERDADEIRO { $$= new Boleano(true);        }
 
-numeric_term : numeric_term '*' numeric_factor{
-}
-
-numeric_term : numeric_term '/' numeric_factor{
-}
-
-numeric_term : numeric_factor{
-}
-
-numeric_factor : '(' numeric_expression ')'{
-}
-
-numeric_factor : TOK_IDENT{
-}
-
-numeric_factor : TOK_INT{
-}
-
-numeric_factor : TOK_FLOAT{
-}
-
-numeric_factor : unary{
-} 
-
-unary : '-' numeric_factor{
-}
-
-print : TOK_PRINT '(' tok ')'';'{
-}
-
-selection : TOK_IF '(' condition ')' '{' globals '}'{
-}
-
-selection : TOK_IF '(' condition ')' '{' globals '}' TOK_ELSE '{' globals '}'{
-}
-
-selection : TOK_IF '(' condition ')' '{' globals '}' TOK_ELSE selection {    
-}
-
-condition : numeric_factor logic_operator numeric_factor{
-}
-
-condition : '(' condition TOK_OR condition ')'{
-}
-
-condition: '(' condition TOK_AND condition ')' {
-}
-
-condition : numeric_expression{
-}
-
-condition : bool{
-}
-
-bool : TOK_TRUE{
-}
-
-bool : TOK_FALSE{
-}
-
-bool : not{
-}
-
-not : '!''(' condition ')'{
-}
-
-logic_operator : TOK_DIFERENTE{
-}
-
-logic_operator : TOK_IGUAL{
-}
-
-logic_operator : '<'{
-}
-
-logic_operator : TOK_MEOI{
-}
-
-logic_operator : '>'{
-}
-
-logic_operator : TOK_MAOI{
-}
-
-loop : TOK_LOOP '(' TOK_INT ';' TOK_INT ';' TOK_INT ')''{' globals '}'{
-}
-
-loop : TOK_LOOP '(' condition ')''{' globals '}'{
-}
-
-break : TOK_BREAK ';'{
-}
+unary:  '-' factor      { $$ = new Unario("-",$factor);   }
+        |'+' factor     { $$ = new Unario("+",$factor);   }
 
 %%
